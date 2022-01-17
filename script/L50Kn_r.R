@@ -24,6 +24,7 @@ library(imputeTS)
 
 #cargamos datos 
 
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")
 datos<-read.csv("Merluzo.csv",header=TRUE)
 datos<-datos[,-1]
 str(datos)
@@ -37,8 +38,8 @@ datos$SEXO <- factor(datos$SEXO,
 datos$Madurez<-factor(datos$Madurez,
                       labels=c("Inmaduro","Maduro"))
 
-#filtramos la base de datos en función del período temporal a utilizar
-#en este caso, se acordó unidad temporal año a partir del 1981, esto es 1982 inclusive
+#filtramos la base de datos en funci?n del per?odo temporal a utilizar
+#en este caso, se acord? unidad temporal a?o a partir del 1981, esto es 1982 inclusive
 datos<-subset(datos,datos$ANO>1981)
 
 #unidad temporal como factor
@@ -54,11 +55,11 @@ sum(table(datos$ANO[datos$SEXO=="Hembra"])) #15124
 sum(table(datos$ANO[datos$SEXO=="Macho"])) #11697
 
 ##########################################################
-# L50  que será variable dependiente en el estudio
+# L50  que ser? variable dependiente en el estudio
 #############################################################
 
 
-#calculamos L50 de la población de merluza
+#calculamos L50 de la poblaci?n de merluza
  
 
 L50pob =gonad_mature(datos, varNames = c("TALLA", "Madurez"),  inmName = "Inmaduro",matName = "Maduro", method = "fq", niter = 999)
@@ -1809,14 +1810,14 @@ drop1(m2,~.,test="Chisq")
 
 
 ##########################################################
-# Kn (con peso vivo) que serán variables independientes en el estudio
+# Kn (con peso vivo) que ser?n variables independientes en el estudio
 #############################################################
 
 datospv <- datos %>%
   filterD(!is.na(PESO_vivo),!is.na(TALLA)) %>%
   mutate(logL=log(TALLA),logW=log(PESO_vivo))
 
-#relación talla peso
+#relaci?n talla peso
 lm1 <- lm(logW~logL,data=datospv)
 coef(lm1)
 summary(lm1)
