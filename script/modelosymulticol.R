@@ -1,5 +1,5 @@
 
-#cargamos librería
+#cargamos librer?a
 
 rqrd <- c( "sizeMat","FSA","FSAdata","captioner","knitr","dplyr","magrittr", "readxl", "sciplot", "Publish","GGally","Hmisc","tidymv","PerformanceAnalytics")
 library(readxl)
@@ -43,9 +43,9 @@ library(itsadug)
 library(FitAR)
 
 
-setwd("C:/Users/Usuario/Desktop/TFM2/DATOS/Datos procesados")
 
 ## cargamos datos
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")
 datos<-read.csv("Merluzo.csv",header=TRUE)
 datos<-datos[,-1]
 
@@ -61,7 +61,7 @@ datos$SEXO <- factor(datos$SEXO,
 #maduro e inmaduro
 datos$Madurez<-factor(datos$Madurez,
                       labels=c("Inmaduro","Maduro"))
-# año como factor
+# a?o como factor
 datos$ANO<-as.factor(datos$ANO)
 #eliminamos los que sean de sexo desconocido
 datos <- datos %>%
@@ -73,34 +73,30 @@ datos <- datos %>%
 ########################################################################################
 
 #AMO
-setwd("C:/Users/Usuario/Desktop/TFM2/DATOS/Datos procesados")
-AMO<-read.csv("AMO.csv")
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")AMO<-read.csv("AMO.csv")
 media<-apply(AMO[,c(3:14)], 1, mean)
 AMO<-as.data.frame(cbind(AMO,media))
 AMO<-subset(AMO, Ano>=1982)
 AMO<-AMO[,15]
 
-setwd("C:/Users/Usuario/Desktop/TFM2/DATOS/Datos procesados")
-#NAO
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")#NAO
 NAO<-read.csv("NAO.csv")
 NAO<-NAO[,-1]
 NAO<-subset(NAO, Ano>=1982)
 NAO<-NAO[,"Mean"]
 
 #sst
-setwd("C:/Users/Usuario/Desktop/TFM2/DATOS/Datos procesados")
-SST<-read.csv("SST8c9a_año.csv")
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")SST<-read.csv("SST8c9a_a?o.csv")
 SST<-SST[,4]
 
-setwd("C:/Users/Usuario/Desktop/TFM2/DATOS/Datos procesados")
-#ssb
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")#ssb
 ssb_yr<-read.csv("ssb_yr.csv")
 BIO<-ssb_yr[,3]
 
 
 
 #ssb_len
-setwd("C:/Users/Usuario/Desktop/TFM2/DATOS/Datos procesados")
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")
 hkelen<-read.csv("hkelen_nueva.csv")
 Hkelen<-subset(hkelen,hkelen$len>19 & hkelen$len<36)
 Hkelen1<-tapply(Hkelen$nPop,list(Hkelen$year,Hkelen$step),mean)
@@ -120,13 +116,13 @@ ssb_age<-ssb_age[,1]
 
 #Kn
 Knm<-c(0.81,0.61, 0.70,0.55, 0.71, 0.74, 0.39, 0.49, 0.62, 0.63,0.48, 0.37, 0.52, 0.61, 0.53, 0.57,NA,NA,NA,NA,0.74, 0.69, 0.67, 0.58,0.65, 0.64, 0.71, 0.71,0.68, 0.64, 0.55, 0.47, 0.87, 0.41,0.61, 0.71, 0.79, 0.57)
-Knh<-na.ma(Knm) #reemplazamos valores faltantes con medias móviles
+Knh<-na.ma(Knm) #reemplazamos valores faltantes con medias m?viles
 Knh<- c(1.77,0.80,1.05,0.92, 1.21,1.59, 0.51,0.85,0.77, 0.99, 0.41, 0.35,0.62, 0.85, 1.02,1.10, 2.48,NA,NA,NA, 1.55, 1.40, 1.32, 1.06,0.94, 1.28, 1.11, 1.03, 0.90, 0.71, 1.13, 1.08,1.30, 2.02, 1.04, 1.24,1.55, 1.65)
-Knh<-na.ma(Knh) #reemplazamos valores faltantes con medias móviles
+Knh<-na.ma(Knh) #reemplazamos valores faltantes con medias m?viles
 
 
 
-####### SUAVIZACIÓN (TSCLEAN) Y REEMPLAZAMIENTO  DE ATÍPICOS ######
+####### SUAVIZACI?N (TSCLEAN) Y REEMPLAZAMIENTO  DE AT?PICOS ######
 
 
 
@@ -148,51 +144,51 @@ tsoutliers::tso(ts(SST,start=1982))
 plot(SST,type="line")
 
 BIO<-tsclean(BIO)
-boxplot(BIO)#se detectan  atípicos 
+boxplot(BIO)#se detectan  at?picos 
 boxplot.stats(BIO)$out
 tsoutliers::tso(ts(BIO,start=1982),maxit.iloop = 3)
 plot(tsoutliers::tso(ts(BIO,start=1982),maxit.iloop = 3))
-#boxplot identifica más outliers (los 6 primeros valores) que tso, 
-#tso identifica uno en la posición 7 y otro en la 10.
-#se hace un plot de la serie bio para dejar la decisión de reemplazar atípico 
+#boxplot identifica m?s outliers (los 6 primeros valores) que tso, 
+#tso identifica uno en la posici?n 7 y otro en la 10.
+#se hace un plot de la serie bio para dejar la decisi?n de reemplazar at?pico 
 #a juicio del investigador/a
 plot(ts(BIO,start=1982))
-#no se realiza ninguna modificación
+#no se realiza ninguna modificaci?n
 
 
 ssb_age<-tsclean(ssb_age)
 boxplot(ssb_age)
-boxplot.stats(ssb_age)$out #atípico en la posición 27
-tsoutliers::tso(ts(ssb_age,start=1982))#atípico en la posición 14 y 27
+boxplot.stats(ssb_age)$out #at?pico en la posici?n 27
+tsoutliers::tso(ts(ssb_age,start=1982))#at?pico en la posici?n 14 y 27
 plot(tsoutliers::tso(ts(ssb_age,start=1982)))
-#dado que tanto boxplot como tsoutliers detectan atípico en la posición 27 se procede
-#a reemplazar el mismo a través de medias móviles
+#dado que tanto boxplot como tsoutliers detectan at?pico en la posici?n 27 se procede
+#a reemplazar el mismo a trav?s de medias m?viles
 plot(ssb_age,type="line")
 
 ssb_age_t<-ssb_age
 ssb_age_t[27]<-ssb_age_t[NA]
 ssb_age_t<-na.ma(ssb_age_t)
-boxplot.stats(ssb_age_t) #una vez se reemplaza el atípico, boxplot no detecta ningún
-#outro outlier pero tso sí en la posición 14, se ilustra a continuación
+boxplot.stats(ssb_age_t) #una vez se reemplaza el at?pico, boxplot no detecta ning?n
+#outro outlier pero tso s? en la posici?n 14, se ilustra a continuaci?n
 plot(tsoutliers::tso(ts(ssb_age_t,start=1982)))
-#sin embargo, una vez se  reemplaza el atípico detectado por tso en la posición 14, boxplot
-#detecta otro atípico en la posición 28, por lo que se decide sólo reemplazar el 
-#outlier de la posición 27 y dejar la serie como en el paso que nos precede como ssb_age_t
+#sin embargo, una vez se  reemplaza el at?pico detectado por tso en la posici?n 14, boxplot
+#detecta otro at?pico en la posici?n 28, por lo que se decide s?lo reemplazar el 
+#outlier de la posici?n 27 y dejar la serie como en el paso que nos precede como ssb_age_t
 plot(ssb_age_t,type="line")
 
 
-boxplot.stats(ssb_ln)$out #detecta un atípico en la 27
-(tsoutliers::tso(ts(ssb_ln,start=1982))) #se detecta un atípico en la pos 14 y otro en la 27
+boxplot.stats(ssb_ln)$out #detecta un at?pico en la 27
+(tsoutliers::tso(ts(ssb_ln,start=1982))) #se detecta un at?pico en la pos 14 y otro en la 27
 tsoutliers::tso(ts(ssb_ln,start=1982))
-#al igual que con ssb_age, se reemplaza el outlier detectado tanto por boxplot como por tso de la posición 27
+#al igual que con ssb_age, se reemplaza el outlier detectado tanto por boxplot como por tso de la posici?n 27
 ssb_ln_t<-ssb_ln
 ssb_ln_t[27]<-ssb_ln_t[NA]
 ssb_ln_t<-na.ma(ssb_ln_t)
 boxplot(ssb_ln_t)
 plot(tsoutliers::tso(ts(ssb_ln_t,start=1982)))
-#se da el mismo caso que para ssb_age, una vez se reemplaza el atípico en la posición 27,
-#boxplot deja de detectar atípics, sin embargo tso vuelve a detectar el de la posición 14.
-#non obstante, se reemplaza sólo el de la posición 27 sin reemplazar el de la posición 14, al igual que la serie anterior.
+#se da el mismo caso que para ssb_age, una vez se reemplaza el at?pico en la posici?n 27,
+#boxplot deja de detectar at?pics, sin embargo tso vuelve a detectar el de la posici?n 14.
+#non obstante, se reemplaza s?lo el de la posici?n 27 sin reemplazar el de la posici?n 14, al igual que la serie anterior.
 
 Knm<-tsclean(Knm)
 boxplot(Knm)
@@ -200,7 +196,7 @@ tsoutliers::tso(ts(Knm,start=1982))
 
 Knh<-tsclean(Knh)
 boxplot(Knh)
-tsoutliers::tso(ts(Knh,start=1982))#atípico en la posición 14 y 27
+tsoutliers::tso(ts(Knh,start=1982))#at?pico en la posici?n 14 y 27
 plot(tsoutliers::tso(ts(Knh,start=1982)))
 Knh_t<-Knh
 Knh_t[17]<-Knh_t[NA]
@@ -215,7 +211,7 @@ year<-c(1982:2019)
 
 
 ####################################################################################################
-############################### COMPROBACIÓN DE MULTICOLINEALIDAD ##################################
+############################### COMPROBACI?N DE MULTICOLINEALIDAD ##################################
 ###################################################################################################
 
 
@@ -373,16 +369,16 @@ tsoutliers::tso(ts(L50macho,start=1982))
 #L50 HEMBRA
 L50h<-c(49.7, 44.5, 40.5, 44.8, 44.6, 40.5, 39.2, 41.6, 41.8, 42.3, 43.3, 43.5, 46.1 ,46.3,45.1, 52.3, 51.6, 47.3 ,43.4, 46.0, 46.5 ,45.8, 45.0, 44.3,47.0, 45.6, 46.6, 49.9,45.7, 45.3, 40.9, 45.7, 39.0, 46.5, 33.1, 38.3, 41.8, 38.8)
 
-#tanto boxplot como tso identifican un outlier en la posición 15 y se procede a reemplazarlo
+#tanto boxplot como tso identifican un outlier en la posici?n 15 y se procede a reemplazarlo
 boxplot(L50h)
 boxplot.stats(L50h)
 tsoutliers::tso(ts(L50h,start=1982))
 plot(tsoutliers::tso(ts(L50h,start=1982)))
-#imputación valor de la posición 35 
+#imputaci?n valor de la posici?n 35 
 L50ht<-L50h
 L50ht[35]<-NA
 L50ht<-na.ma(L50ht)
-#una vez se reemplaza el atípico en la posición 35, no se detectan más atípicos
+#una vez se reemplaza el at?pico en la posici?n 35, no se detectan m?s at?picos
 
 
 
@@ -436,7 +432,7 @@ Box.test(resid(m),lag=10)
 t.test(resid(m),mu=0)
 bptest(m,varformula = ~year, data=L50m)
 
-#residuos test gráficos
+#residuos test gr?ficos
 x<-c(1,3,2,4)
 n<-matrix(x,ncol=2)
 layout(n)
@@ -450,10 +446,10 @@ acf(resid(m),lag.max=38, main="ACF")
 pacf(resid(m),lag.max =38, main="PACF")
 
 
-#Representación gráfica
+#Representaci?n gr?fica
   
 
-plot(L50m ~ year,data=L50m,lwd=1,col="blue",xlab="Año",ylab="L50")
+plot(L50m ~ year,data=L50m,lwd=1,col="blue",xlab="A?o",ylab="L50")
 itsadug::plot_smooth(m ,view=("year"), add=TRUE, col="lightblue", rug=FALSE, print.summary = FALSE)
 
 
@@ -479,8 +475,8 @@ m<-gam(L50m~s(year,bs="cr",k=5),method="REML",data=L50mb) #eliminamos sst
 
 
 #llegamos al mismo modelo que con ssb_age, como se ha visto anteriormente,
-#este modelo pasa las hipótesis de los residuod, con lo cual, este modelo es válido
-#no se vuelve a realizar los test y los gráficos para chequear las hipótesis
+#este modelo pasa las hip?tesis de los residuod, con lo cual, este modelo es v?lido
+#no se vuelve a realizar los test y los gr?ficos para chequear las hip?tesis
 
 
 
@@ -513,7 +509,7 @@ m1<-gam(L50hembra~s(year,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7)+s(NAO,bs="cr",k=7
 summary(m1)
 gam.check(m)
 
-#análisis residuos
+#an?lisis residuos
 
 jarque.bera.test(resid(m))
 shapiro.test(resid(m))
@@ -523,7 +519,7 @@ kpss.test(resid(m))
 t.test(resid(m),mu=0)
 bptest(m,varformula = ~year+ssb_age_t+NAO+BIO,data=L50ha) #corregir
 
-#análisis gráfico
+#an?lisis gr?fico
 
 x<-c(1,3,2,4)
 n<-matrix(x,ncol=2)
@@ -542,7 +538,7 @@ par(mfrow=c(2,2))
 
 par(mfrow=c(2,2))
 
-plot(L50hembra~year,data=L50ha,lwd=1,type="p",col="darkgreen",xlab="Año", ylab="Talla de primera madurez")
+plot(L50hembra~year,data=L50ha,lwd=1,type="p",col="darkgreen",xlab="A?o", ylab="Talla de primera madurez")
 itsadug::plot_smooth(m,view = c("year"),add=TRUE,col="lightgreen",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
 
 plot(L50hembra~ssb_age_t,data=L50ha,lwd=1,type="p",col="darkgreen",xlab="ssb_age_t", ylab="Talla de primera madurez")
@@ -607,7 +603,7 @@ gam.check(m)
 
 layout(matrix(c(1,3,2,3), ncol = 2))
 
-plot(L50h~year,data=L50h,lwd=1,type="p",col="darkgreen",xlab="Año", ylab="Talla de primera madurez")
+plot(L50h~year,data=L50h,lwd=1,type="p",col="darkgreen",xlab="A?o", ylab="Talla de primera madurez")
 itsadug::plot_smooth(m,view = c("year"),add=TRUE,col="lightgreen",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
 
 
@@ -626,5 +622,5 @@ plot(L50h$L50h,  type = "b", ylab = "Talla de primera madurez",col="darkgreen")
 lines(predict(m),col="lightgreen",lwd=2)
 
 
-###Análisis sensibilidad
-AIC(m1,m2) #nos quedamos con el modelo de ssb_ln_t (el último)
+###An?lisis sensibilidad
+AIC(m1,m2) #nos quedamos con el modelo de ssb_ln_t (el ?ltimo)
