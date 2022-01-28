@@ -117,12 +117,27 @@ ssb_age<-as.data.frame(hkage)
 ssb_age<-ssb_age[,1]
 
 #Kn
+
+#kn machos
 Knm<-c(0.81,0.61, 0.70,0.55, 0.71, 0.74, 0.39, 0.49, 0.62, 0.63,0.48, 0.37, 0.52, 0.61, 0.53, 0.57,NA,NA,NA,NA,0.74, 0.69, 0.67, 0.58,0.65, 0.64, 0.71, 0.71,0.68, 0.64, 0.55, 0.47, 0.87, 0.41,0.61, 0.71, 0.79, 0.57)
-Knh<-na.ma(Knm) #reemplazamos valores faltantes con medias m?viles
+#gráfico
+fcm=ts(Knm,start = c(1982,1), end = c(2019,1),frequency = 1)
+plot(fcm,xlab="Year",ylab="Kn",lwd=1, col=4,main="(a)")
+
+Knm<-na.ma(Knm) #reemplazamos valores faltantes con medias m?viles
+
+# kn hembras
 Knh<- c(1.77,0.80,1.05,0.92, 1.21,1.59, 0.51,0.85,0.77, 0.99, 0.41, 0.35,0.62, 0.85, 1.02,1.10, 2.48,NA,NA,NA, 1.55, 1.40, 1.32, 1.06,0.94, 1.28, 1.11, 1.03, 0.90, 0.71, 1.13, 1.08,1.30, 2.02, 1.04, 1.24,1.55, 1.65)
+#gráfico
+fch=ts(Knh,start = c(1982,1), end = c(2019,1),frequency = 1)
+plot(fch, xlab="Year", ylab = "Kn", lwd=1, col=6, main="(b)")
 Knh<-na.ma(Knh) #reemplazamos valores faltantes con medias m?viles
 
-
+par(mfrow=c(1,2))
+fcm=ts(Knm,start = c(1982,1), end = c(2019,1),frequency = 1)
+plot(fcm,xlab="Year",ylab="Kn",lwd=1, col=4,main="(a)")
+fch=ts(Knh,start = c(1982,1), end = c(2019,1),frequency = 1)
+plot(fch, xlab="Year", ylab = "Kn", lwd=1, col=6, main="(b)")
 
 ####### SUAVIZACI?N (TSCLEAN) Y REEMPLAZAMIENTO  DE AT?PICOS ######
 
@@ -603,25 +618,21 @@ par(mfrow=c(2,2))
 gam.check(m)
 
 
-layout(matrix(c(1,3,2,3), ncol = 2))
-
-plot(L50h~year,data=L50h,lwd=1,type="p",col="darkgreen",xlab="A?o", ylab="Talla de primera madurez")
-itsadug::plot_smooth(m,view = c("year"),add=TRUE,col="lightgreen",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
-
-
-plot(L50h~ssb_ln_t,data=L50h,lwd=1,type="p",col="darkgreen",xlab="ssb_age", ylab="Talla de primera madurez")
-itsadug::plot_smooth(m,view = c("ssb_ln_t"),add=TRUE,col="lightgreen",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
+par(mfrow=c(2,2))
+plot(L50h~year,data=L50ha,lwd=1,type="p",col=6,xlab="Year", ylab="Size at first maturity")
+itsadug::plot_smooth(m,view = c("year"),add=TRUE,col="lightpink",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
 
 
-plot(L50h~NAO,data=L50h,lwd=1,type="p",col="darkgreen",xlab="NAO", ylab="Talla de primera madurez")
-itsadug::plot_smooth(m,view = c("NAO"),add=TRUE,col="lightgreen",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
+plot(L50h~ssb_ln_t,data=L50ha,lwd=1,type="p",col= 6,xlab="SSB at length", ylab="Size at first maturity")
+itsadug::plot_smooth(m,view = c("ssb_ln_t"),add=TRUE,col="lightpink",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
 
 
-plot(L50h~BIO,data=L50h,lwd=1,type="p",col="darkgreen",xlab="BIO", ylab="Talla de primera madurez")
-itsadug::plot_smooth(m,view = c("BIO"),add=TRUE,col="lightgreen",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
+plot(L50h~NAO,data=L50ha,lwd=1,type="p",col=6,xlab="NAO", ylab="Size at first maturity")
+itsadug::plot_smooth(m,view = c("NAO"),add=TRUE,col="lightpink",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
 
-plot(L50h$L50h,  type = "b", ylab = "Talla de primera madurez",col="darkgreen")
-lines(predict(m),col="lightgreen",lwd=2)
+
+plot(L50h~BIO,data=L50ha,lwd=1,type="p",col=6,xlab="Biomass", ylab="Size at first maturity")
+itsadug::plot_smooth(m,view = c("BIO"),add=TRUE,col="lightpink",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
 
 
 ###An?lisis sensibilidad
