@@ -73,7 +73,8 @@ datos <- datos %>%
 ########################################################################################
 
 #AMO
-setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")AMO<-read.csv("AMO.csv")
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")
+AMO<-read.csv("AMO.csv")
 media<-apply(AMO[,c(3:14)], 1, mean)
 AMO<-as.data.frame(cbind(AMO,media))
 AMO<-subset(AMO, Ano>=1982)
@@ -86,8 +87,9 @@ NAO<-subset(NAO, Ano>=1982)
 NAO<-NAO[,"Mean"]
 
 #sst
-setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")SST<-read.csv("SST8c9a_a?o.csv")
-SST<-SST[,4]
+setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")
+SST<-read.csv("SST.csv")
+SST<-SST[,3]
 
 setwd("C:/Users/Usuario/Desktop/paper/PAPER/datos")#ssb
 ssb_yr<-read.csv("ssb_yr.csv")
@@ -405,17 +407,17 @@ L50ma<-as.data.frame(cbind(year,AMO,NAO,SST,BIO,ssb_age_t,Knm,L50macho))
 colnames(L50ma)<-c("year","AMO","NAO","SST","BIO","ssb_age_t","Knm","L50m")
 #backward
 
-m<-gam(L50m~s(year,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(SST,bs="cr",k=6)+s(ssb_age_t,bs="cr",k=6)+s(BIO,bs="cr",k=6)+s(Knm,bs="cr",k=6),method="REML",data=L50m) #eliminmos bio
+m<-gam(L50m~s(year,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(SST,bs="cr",k=6)+s(ssb_age_t,bs="cr",k=6)+s(BIO,bs="cr",k=6)+s(Knm,bs="cr",k=6),method="REML",data=L50ma) #eliminmos bio
 
-m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7)+s(Knm,bs="cr",k=7),method="REML",data=L50m) #eliminmos sst
+m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7)+s(Knm,bs="cr",k=7),method="REML",data=L50ma) #eliminmos sst
 
-m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7),method="REML",data=L50m) #eliminmos knm
+m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7),method="REML",data=L50ma) #eliminmos knm
 
-m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7),method="REML",data=L50m) #eliminmos ssb
+m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7),method="REML",data=L50ma) #eliminmos ssb
 
-m<-gam(L50m~s(year,bs="cr",k=4)+s(NAO,bs="cr",k=4),method="REML",data=L50m) #eliminmos nao
+m<-gam(L50m~s(year,bs="cr",k=4)+s(NAO,bs="cr",k=4),method="REML",data=L50ma) #eliminmos nao
 
-m<-gam(L50m~s(year,bs="cr",k=4),method="REML",data=L50m) 
+m<-gam(L50m~s(year,bs="cr",k=4),method="REML",data=L50ma) 
 
 
 
@@ -430,7 +432,7 @@ adfTest(resid(m))
 kpss.test(resid(m))
 Box.test(resid(m),lag=10)
 t.test(resid(m),mu=0)
-bptest(m,varformula = ~year, data=L50m)
+bptest(m,varformula = ~year, data=L50ma)
 
 #residuos test gr?ficos
 x<-c(1,3,2,4)
@@ -449,7 +451,7 @@ pacf(resid(m),lag.max =38, main="PACF")
 #Representaci?n gr?fica
   
 
-plot(L50m ~ year,data=L50m,lwd=1,col="blue",xlab="A?o",ylab="L50")
+plot(L50m ~ year,data=L50ma,lwd=1,col="blue",xlab="Year",ylab="Size at first maturity")
 itsadug::plot_smooth(m ,view=("year"), add=TRUE, col="lightblue", rug=FALSE, print.summary = FALSE)
 
 
@@ -571,11 +573,11 @@ m<-gam(L50hembra~s(year,bs="cr",k=6)+s(ssb_ln_t,bs="cr",k=6)+s(NAO,bs="cr",k=6)+
 
 m<-gam(L50hembra~s(year,bs="cr",k=6)+s(ssb_ln_t,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(BIO,k=6,bs="cr")+s(Kn,k=6,bs="cr"),method="REML",data=L50ha)#eliminamos kn
 
-m2<-gam(L50hembra~s(year,bs="cr",k=7)+s(ssb_ln_t,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(BIO,k=7,bs="cr"),method="REML",data=L50ha)
+m<-gam(L50hembra~s(year,bs="cr",k=7)+s(ssb_ln_t,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(BIO,k=7,bs="cr"),method="REML",data=L50ha)
 
 
 
-summary(m)
+summary(m2)
 gam.check(m)
 
 jarque.bera.test(resid(m))
