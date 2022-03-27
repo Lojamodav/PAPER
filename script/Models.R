@@ -19,17 +19,17 @@ colnames(L50male)<-c("Year","AMO","NAO","SST","BIO","ssb_age_t","Knm","L50m")
 #Procedure step backward 
 
 
-m<-gam(L50m~s(year,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(SST,bs="cr",k=6)+s(ssb_age_t,bs="cr",k=6)+s(BIO,bs="cr",k=6)+s(Knm,bs="cr",k=6),method="REML",data=L50male) #Remove BIO
+m<-gam(L50m~s(Year,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(SST,bs="cr",k=6)+s(ssb_age_t,bs="cr",k=6)+s(BIO,bs="cr",k=6)+s(Knm,bs="cr",k=6),method="REML",data=L50male) #Remove BIO
 
-m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7)+s(Knm,bs="cr",k=7),method="REML",data=L50male) #Remove sst
+m<-gam(L50m~s(Year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7)+s(Knm,bs="cr",k=7),method="REML",data=L50male) #Remove sst
 
-m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7),method="REML",data=L50male) #Remove Knm
+m<-gam(L50m~s(Year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7),method="REML",data=L50male) #Remove Knm
 
-m<-gam(L50m~s(year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7),method="REML",data=L50male) #Remove SSB
+m<-gam(L50m~s(Year,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7),method="REML",data=L50male) #Remove SSB
 
-m<-gam(L50m~s(year,bs="cr",k=4)+s(NAO,bs="cr",k=4),method="REML",data=L50ma) #Remove NAO
+m<-gam(L50m~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4),method="REML",data=L50ma) #Remove NAO
 
-m<-gam(L50m~s(year,bs="cr",k=4),method="REML",data=L50male) 
+m<-gam(L50m~s(Year,bs="cr",k=4),method="REML",data=L50male) 
 
 
 
@@ -63,7 +63,7 @@ pacf(resid(m),lag.max =38, main="PACF")
 #Graphics
 
 
-plot(L50m ~ year,data=L50male,lwd=1,col="blue",xlab="Year",ylab="Size at first maturity")
+plot(L50m ~ Year,data=L50male,lwd=1,col="blue",xlab="Year",ylab="Size at first maturity")
 itsadug::plot_smooth(m ,view=("Year"), add=TRUE, col="lightblue", rug=FALSE, print.summary = FALSE)
 
 
@@ -77,20 +77,20 @@ colnames(L50male)<-c("Year","AMO","NAO","SST","BIO","ssb_ln_t","Knm","L50m")
 
 #Procedure step backward 
 
-m<-gam(L50m ~s(Year,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(SST,bs="cr",k=6)+s(ssb_ln_t,bs="cr",k=6)+s(BIO,bs="cr",k=6)+s(Knm,bs="cr",k=6),method="REML",data=L50male) #eliminmos bio
+m<-gam(L50m ~s(Year,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(SST,bs="cr",k=6)+s(ssb_ln_t,bs="cr",k=6)+s(BIO,bs="cr",k=6)+s(Knm,bs="cr",k=6),method="REML",data=L50male) #Remove biomass
 
-m<-gam(L50m ~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4)+s(ssb_ln_t,bs="cr",k=4)+s(Knm,bs="cr",k=4),method="REML",data=L50male) #eliminmos sst
+m<-gam(L50m ~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4)+s(ssb_ln_t,bs="cr",k=4)+s(Knm,bs="cr",k=4),method="REML",data=L50male) #Remove SST
 
-m<-gam(L50m~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4)+s(ssb_ln_t,bs="cr",k=4),method="REML",data=L50male) #eliminmos knm
+m<-gam(L50m~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4)+s(ssb_ln_t,bs="cr",k=4),method="REML",data=L50male) #Remove Kn
 
-m<-gam(L50m~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4),method="REML",data=L50male) #eliminmos ssb_ln
+m<-gam(L50m~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4),method="REML",data=L50male) #Remove ssb_ln
 
-m<-gam(L50m~s(Year,bs="cr",k=4),method="REML",data=L50male) #eliminamos sst
+m<-gam(L50m~s(Year,bs="cr",k=4),method="REML",data=L50male) 
 
 
-#llegamos al mismo modelo que con ssb_age, como se ha visto anteriormente,
-#este modelo pasa las hip?tesis de los residuod, con lo cual, este modelo es v?lido
-#no se vuelve a realizar los test y los gr?ficos para chequear las hip?tesis
+#We arrive at the same model as with ssb_age. 
+#As checked above, this model passes the hypotheses on the residuals, 
+#so this model is valid. That said, the basic assumptions on the residuals are not re-tested.
 
 summary(m)
 AIC(m)
@@ -144,7 +144,7 @@ acf(resid(m),lag.max=38, main="ACF")
 pacf(resid(m),lag.max =38, main="PACF")
 par(mfrow=c(2,2))
 
-
+# Plots of model
 
 par(mfrow=c(2,2))
 
@@ -164,6 +164,10 @@ itsadug::plot_smooth(m,view = c("NAO"),add=TRUE,col="lightgreen",rug=FALSE,rm.ra
 
 plot(L50female$L50f,  type = "b", ylab = "Size at first maturity",col="darkgreen")
 lines(predict(m),col="lightgreen",lwd=2)
+
+
+##GAM MODELS FOR FEMALE HAKES
+
 
 
 ################################
@@ -220,7 +224,7 @@ setwd("C:/Users/Usuario/Desktop/paper/PAPER/gráficos")
 ggsave("Knh.jpeg",scale = 1,dpi=300)
 
 
-#Plor models
+#Plot models
 
 par(mfrow=c(2,2))
 plot(L50f~Year,data=L50female,lwd=1,type="p",col=6,xlab="Year", ylab="Size at first maturity")
