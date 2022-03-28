@@ -1,22 +1,19 @@
 
-##################################################################################
-##################################################################################
 
-##                       GAM MODELS                                             ##
-##################################################################################
-##################################################################################
+##### GAM MODELS ####
 
 
-##GAM MODELS FOR MALE HAKES
 
-################################
-#GAM models for  male hakes with  SSB_age
-#################################
+
+### GAM MODELS FOR MALE HAKES
+
+
+## GAM models for MALE hakes with  SSB_age
 
 L50male<-as.data.frame(cbind(Year,AMO,NAO,SST,BIO,ssb_age_t,Knm,L50_Male))
 colnames(L50male)<-c("Year","AMO","NAO","SST","BIO","ssb_age_t","Knm","L50m")
 
-#Procedure step backward 
+# Procedure step backward 
 
 
 m<-gam(L50m~s(Year,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(SST,bs="cr",k=6)+s(ssb_age_t,bs="cr",k=6)+s(BIO,bs="cr",k=6)+s(Knm,bs="cr",k=6),method="REML",data=L50male) #Remove BIO
@@ -31,12 +28,13 @@ m<-gam(L50m~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4),method="REML",data=L50ma) #Re
 
 m<-gam(L50m~s(Year,bs="cr",k=4),method="REML",data=L50male) 
 
-
+# summary
 
 summary(m)
-gam.check(m)
 
-#Residual testing
+# Residual testing
+
+gam.check(m)
 
 jarque.bera.test(resid(m))
 shapiro.test(resid(m))
@@ -46,7 +44,8 @@ Box.test(resid(m),lag=10)
 t.test(resid(m),mu=0)
 bptest(m,varformula = ~Year, data=L50male)
 
-#Graphic test residuals.
+# Graphic test residuals
+
 x<-c(1,3,2,4)
 n<-matrix(x,ncol=2)
 layout(n)
@@ -60,22 +59,22 @@ acf(resid(m),lag.max=38, main="ACF")
 pacf(resid(m),lag.max =38, main="PACF")
 
 
-#Graphics
+# Plot:
 
+#Estimated smoother effect of year for the GAM size at first sexual maturity (L_50)for males 
+#of the European hake for the time-series (1982-2019). 
 
 plot(L50m ~ Year,data=L50male,lwd=1,col="blue",xlab="Year",ylab="Size at first maturity")
 itsadug::plot_smooth(m ,view=("Year"), add=TRUE, col="lightblue", rug=FALSE, print.summary = FALSE)
 
 
+## GAM models for  male hakes with SSB_Length
 
-################################
-#GAM models for  male hakes with SSB_Length
-#################################
 
 L50male<-as.data.frame(cbind(Year,AMO,NAO,SST,BIO,ssb_ln_t,Knm,L50m))
 colnames(L50male)<-c("Year","AMO","NAO","SST","BIO","ssb_ln_t","Knm","L50m")
 
-#Procedure step backward 
+# Procedure step backward 
 
 m<-gam(L50m ~s(Year,bs="cr",k=6)+s(NAO,bs="cr",k=6)+s(SST,bs="cr",k=6)+s(ssb_ln_t,bs="cr",k=6)+s(BIO,bs="cr",k=6)+s(Knm,bs="cr",k=6),method="REML",data=L50male) #Remove biomass
 
@@ -87,27 +86,29 @@ m<-gam(L50m~s(Year,bs="cr",k=4)+s(NAO,bs="cr",k=4),method="REML",data=L50male) #
 
 m<-gam(L50m~s(Year,bs="cr",k=4),method="REML",data=L50male) 
 
-
-#We arrive at the same model as with ssb_age. 
-#As checked above, this model passes the hypotheses on the residuals, 
-#so this model is valid. That said, the basic assumptions on the residuals are not re-tested.
+# summary
 
 summary(m)
+
+#We arrive at the same model as with ssb_age. 
+#As checked above, this model passes the hypotheses on the residuals, so this model is valid.
+#That said, the basic assumptions on the residuals are not re-tested.
+
+
 AIC(m)
 
-#######################################################
-### ##GAM MODELS FOR FEMALE HAKES
-#######################################################
+### GAM MODELS FOR FEMALE HAKES
+
 
 
 L50female<-as.data.frame(cbind(Year,AMO,NAO,SST,BIO,ssb_age_t,Knh,L50f)); L50female
 colnames(L50female)<-c("Year","AMO","NAO","SST","BIO","ssb_age_t","Kn","L50f")
 
-################################
-#GAM models for  female hakes with  SSB_age
-#################################
 
-#Procedure step backward 
+## GAM models for  female hakes with  SSB_age
+
+
+# Procedure step backward 
 
 m<-gam(L50f~s(Year,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(SST,bs="cr",k=7)+s(BIO,k=7,bs="cr")+s(Kn,k=7,bs="cr"),method="REML",data=L50female)#Remove SST
 
@@ -115,11 +116,14 @@ m<-gam(L50f~s(Year,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(BI
 
 m<-gam(L50f~s(Year,bs="cr",k=7)+s(ssb_age_t,bs="cr",k=7)+s(NAO,bs="cr",k=7)+s(BIO,k=7,bs="cr"),method="REML",data=L50female)
 
+# Summary
 
 summary(m1)
-gam.check(m)
 
-#Residual testing
+
+# Residual testing
+
+gam.check(m)
 
 jarque.bera.test(resid(m))
 shapiro.test(resid(m))
@@ -129,7 +133,7 @@ kpss.test(resid(m))
 t.test(resid(m),mu=0)
 bptest(m,varformula = ~Year+ssb_age_t+NAO+BIO,data=L50female) #corregir
 
-#Graphic residual testing
+# Graphic residual testing
 
 x<-c(1,3,2,4)
 n<-matrix(x,ncol=2)
@@ -144,7 +148,11 @@ acf(resid(m),lag.max=38, main="ACF")
 pacf(resid(m),lag.max =38, main="PACF")
 par(mfrow=c(2,2))
 
-# Plots of model
+# Plots
+
+#Estimated smooth effects of year, biomass, spawning biomass at age, and the NAO for the GAM size at first sexual maturity (L_50)
+#for females of the European hake for the time-series (1982-2019). 
+
 
 par(mfrow=c(2,2))
 
@@ -162,11 +170,8 @@ plot(L50female~NAO,data=L50female,lwd=1,type="p",col="darkgreen",xlab="NAO", yla
 itsadug::plot_smooth(m,view = c("NAO"),add=TRUE,col="lightgreen",rug=FALSE,rm.ranef = TRUE,print.summary = FALSE)
 
 
-plot(L50female$L50f,  type = "b", ylab = "Size at first maturity",col="darkgreen")
-lines(predict(m),col="lightgreen",lwd=2)
 
-
-##GAM MODELS FOR FEMALE HAKES
+## GAM MODELS FOR FEMALE HAKES
 
 
 
@@ -219,12 +224,17 @@ pacf(resid(m),lag.max =38, main="PACF")
 par(mfrow=c(2,2))
 gam.check(m)
 
+#save
+
 getwd()
 setwd("C:/Users/Usuario/Desktop/paper/PAPER/gráficos")
 ggsave("Knh.jpeg",scale = 1,dpi=300)
 
 
-#Plot models
+#Plot
+
+#Estimated smooth effects of year, biomass, spawning biomass at length, and the NAO for the GAM size at first sexual maturity (L_50)
+#for females of the European hake for the time-series (1982-2019). 
 
 par(mfrow=c(2,2))
 plot(L50f~Year,data=L50female,lwd=1,type="p",col=6,xlab="Year", ylab="Size at first maturity")
@@ -244,6 +254,7 @@ itsadug::plot_smooth(m,view = c("BIO"),add=TRUE,col="lightpink",rug=FALSE,rm.ran
 
 dev.off()
 
-###An?lisis sensibilidad
-AIC(m1,m2) #nos quedamos con el modelo de ssb_ln_t (el ?ltimo)
+# Best model 
+
+AIC(m1,m2) #
 
