@@ -85,16 +85,14 @@ Female<-subset(Hake,Sex=="Female")
 
 L50female = gonad_mature(Female, varNames = c("Length", "Maturity"), inmName = "Inmature",
                          matName = "Mature", method = "fq", niter = 999)
-print(L50female)
 
 
 ## L50 Plot for each sex, males and females
 
-jpeg("com",with=10,height = 7,res=300)
+tiff("sizes.tiff", units="in", width= 5, height =5, res=300, family="Times")
 par(mfrow=c(1,2))
-plot(L50male, xlab = "Length (cm)", ylab = "Proportion of mature males", col = c("blue", "red"), onlyOgive = TRUE)
-plot(L50female, xlab = "Length (cm)", ylab = "Proportion of mature females", col = c("blue", "red"), onlyOgive = TRUE)
-
+plot(L50male, xlab = "Length (cm)", ylab = "Proportion of mature males", col = c("blue", "red"), onlyOgive = TRUE, main="A")
+plot(L50female, xlab = "Length (cm)", ylab = "Proportion of mature females", col = c("blue", "red"), onlyOgive = TRUE, main="B")
 dev.off()
 
 
@@ -1529,25 +1527,26 @@ L50_Year<-c(37,34.9,37.8,37.7,37.5,39.3,35.6,37.1,34.8,34.3,32.7,38.7,38.5,36,38
 L50_Male<-c(36.1,32.6,35.7,35.2,34.7,38.9,33.4,34.6,31.5,29.9,29.7,33.6,31.2,31.1,35.8,34.6,36.8,26.7,31.6,39,33.4,31.1,28.6,31.4,32.7,29.4,30.6,24.2,33.1,25.6,24.1,24.7,NA,NA,27.9,26.5,27.2,23.2)
 L50_Female<-c(49.7,44.5,40.5,44.8,44.6,40.5,39.2,41.6,41.8,42.3,43.3,43.5,46.1,46.3,56.2,51.4,52.3,51.6,47.3,43.4,46,46.5,45.8,45,44.3,47,45.6,46.6,49.9,45.7,45.3,40.9,45.7,39,46.5,33.1,38.3,41.8,38.8)
 
-L50df<-as.data.frame(cbind(Year, L50_Year, L50_Male, L50_Female))4
+L50df<-as.data.frame(cbind(Year, L50_Year, L50_Male, L50_Female))
 
 ## L50 for each sex, male and female
-
+tiff("L50mv.tiff", units="in", width= 10, height =5, res=300, family="Times")
 par(mfrow=c(1,2))
 maturitym=ts((L50df$L50_Male),start = c(1982,1), end = c(2019,1),frequency = 1)
 plot(maturitym,xlab="Year",ylab="Length (cm)",lwd=1, col=4,main="A")
 maturityf=ts(L50df$L50_Female,start = c(1982,1), end = c(2019,1),frequency = 1)
 plot(maturityf, xlab="Year", ylab = "Length (cm)", lwd=1, col=6, main="B")
-
+dev.off()
 ### Kn ### 
 
 ## Kn for each sex, male and female
-
+tiff("Knmv.tiff", units="in", width= 10, height  =5, res=300, family="Times")
 par(mfrow=c(1,2))
-fcm=ts(na.ma(Knm),start = c(1982,1), end = c(2019,1),frequency = 1)
-plot(fcm,xlab="Year",ylab="Kn",lwd=1, col=4,main="(a)")
-fch=ts(na.ma(Knf),start = c(1982,1), end = c(2019,1),frequency = 1)
-plot(fch, xlab="Year", ylab = "Kn", lwd=1, col=6, main="(b)")
+fcm=ts((Knm),start = c(1982,1), end = c(2019,1),frequency = 1)
+plot(fcm,xlab="Year",ylab="Kn",lwd=1, col=4,main="A")
+fch=ts((Knf),start = c(1982,1), end = c(2019,1),frequency = 1)
+plot(fch, xlab="Year", ylab = "Kn", lwd=1, col=6, main="B")
+dev.off()
 
 
 

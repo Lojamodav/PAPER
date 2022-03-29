@@ -1,4 +1,46 @@
 
+#Load libraries
+
+rqrd <- c( "sizeMat","FSA","FSAdata","captioner","knitr","dplyr","magrittr", "readxl", "sciplot", "Publish","GGally","Hmisc","tidymv","PerformanceAnalytics")
+library(readxl)
+install.packages("PerformanceAnalytics")
+library(PerformanceAnalytics)
+library(FSA)
+library(TSA)
+library(sizeMat)
+library(FSAdata)
+library(dplyr)
+library(tidyverse)
+library(magrittr)
+library(tseries)
+library(lattice)
+library(Publish)
+library(sciplot)
+# setup figure, table, and equation captioning
+library(captioner)
+library(multcomp)
+library(car)
+library(knitr)
+library(gplots)
+library(zoo)
+library(fpp2) 
+library(tseries)
+library(imputeTS)
+library(forecast)
+library(mgcv)
+library(lmtest)
+library(ggplot2)
+library(gplots)
+library(lattice)
+library(tidymv)
+library(itsadug)
+library(ggplot2)
+library(GGally)
+library(Hmisc)
+library(corrplot)
+library(fUnitRoots)
+library(itsadug)
+library(FitAR)
 
 ##### GAM MODELS #####
 
@@ -9,8 +51,10 @@
 
 #### GAM MODELS FOR MALE HAKES ####
 
-L50male<-as.data.frame(cbind(Year,AMO,NAO,SST,BIO,ssb_ln_t,Knm,L50m))
-colnames(L50male)<-c("Year","AMO","NAO","SST","BIO","ssb_ln_t","Knm","L50m")
+L50m<-c(36.1,32.6,35.7,35.2,34.7,38.9,33.4,34.6,31.5,29.9,29.7,33.6,31.2,31.1,35.8,34.6,36.8,26.7,31.6,39,33.4,31.1,28.6,31.4,32.7,29.4,30.6,24.2,33.1,25.6,24.1,24.7,25.8,26.8,27.9,26.5,27.2,23.2)
+dfma<-read.csv("dfma.csv",header=TRUE)
+L50male<-as.data.frame(cbind(dfma,L50m)); L50male
+colnames(L50male)<-c("Year","AMO","NAO","SST","BIO","ssb_ln_t","Kn","L50m")
 
 # Procedure step backward 
 
@@ -42,6 +86,7 @@ bptest(m,varformula = ~Year, data=L50male)
 
 # Graphic test residuals
 
+tiff("Residual1.tiff", units = "in", width =10 ,height = 5,res=300, compression= "jpeg", family="Times")
 x<-c(1,3,2,4)
 n<-matrix(x,ncol=2)
 layout(n)
@@ -53,20 +98,21 @@ plot(res~resp,type="p",xlab="Predicted",ylab="Residuals")
 abline(h=0,lty=2,col="blue")
 acf(resid(m),lag.max=38, main="ACF")
 pacf(resid(m),lag.max =38, main="PACF")
-
+dev.off()
 # Plot:
 
 #Estimated smoother effect of year for the GAM size at first sexual maturity (L_50)for males 
 #of the European hake for the time-series (1982-2019). 
-
+tiff("male.tiff", units= "in", width =10 ,height = 5,compression  = "jpeg", res=300, family="Times")
 plot(L50m ~ Year,data=L50male,lwd=1,col="blue",xlab="Year",ylab="Size at first maturity")
 itsadug::plot_smooth(m ,view=("Year"), add=TRUE, col="lightblue", rug=FALSE, print.summary = FALSE)
-
+dev.off()
 
 
 #### GAM MODELS FOR FEMALE HAKES  ####
-
-L50female<-as.data.frame(cbind(Year,AMO,NAO,SST,BIO,ssb_ln_t,Knh,L50f)); L50female
+L50f<-c(49.7, 44.5, 40.5, 44.8, 44.6, 40.5, 39.2, 41.6, 41.8, 42.3, 43.3, 43.5, 46.1 ,46.3,45.1, 52.3, 51.6, 47.3 ,43.4, 46.0, 46.5 ,45.8, 45.0, 44.3,47.0, 45.6, 46.6, 49.9,45.7, 45.3, 40.9, 45.7, 39.0, 46.5, 33.1, 38.3, 41.8, 38.8)
+dffa<-read.csv("dffa.csv",header=TRUE)
+L50female<-as.data.frame(cbind(dffa,L50f)); L50female
 colnames(L50female)<-c("Year","AMO","NAO","SST","BIO","ssb_ln_t","Kn","L50f")
 
 # Procedure step backward 
@@ -96,7 +142,7 @@ bptest(m,varformula = ~Year+ssb_ln_t+NAO+BIO,data=L50female)
 
 
 #Graphic residual testing
-
+tiff("Residual2.tiff", units = "in", width =10 ,height = 5, res=300,compression  = "jpeg", family="Times")
 x<-c(1,3,2,4)
 n<-matrix(x,ncol=2)
 layout(n)
@@ -108,6 +154,9 @@ plot(res~resp,type="p",xlab="Predicted",ylab="Residuals")
 abline(h=0,col="blue",lty=2)
 acf(resid(m),lag.max=38, main="ACF")
 pacf(resid(m),lag.max =38, main="PACF")
+dev.off()
+
+
 par(mfrow=c(2,2))
 gam.check(m)
 
@@ -123,6 +172,7 @@ ggsave("Knh.jpeg",scale = 1,dpi=300)
 #Estimated smooth effects of year, biomass, spawning biomass at length, and the NAO for the GAM size at first sexual maturity (L_50)
 #for females of the European hake for the time-series (1982-2019). 
 
+tiff("L50f.tiff", units="in", width =10 ,height = 5,res=300,compression  = "jpeg", family="Times")
 par(mfrow=c(2,2))
 
 plot(L50f~Year,data=L50female,lwd=1,type="p",col=6,xlab="Year", ylab="Size at first maturity")
