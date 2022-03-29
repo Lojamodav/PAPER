@@ -50,13 +50,6 @@ Hake$Year<-as.factor(Hake$Year)
 #We filter the database excluding hakes of unknown sex
 Hake<-subset(Hake,Hake$Sex!="Unknown")
 
-# 
-sum(table(Hake$Year)) #N=26821
-
-sum(table(Hake$Year[Hake$Sex=="Female"])) #15124
-sum(table(Hake$Year[Hake$Sex=="Male"])) #11697
-
-
 #####  L50 is calculated  #####
 
 
